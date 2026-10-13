@@ -1,4 +1,3 @@
-version: "3.8"
 
 volumes:
   postgres-data:
@@ -10,8 +9,9 @@ services:
   postgres:
     image: postgres:18-alpine
     container_name: tria-postgres
+    restart: unless-stopped
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql
     environment:
       POSTGRES_DB: kestra
       POSTGRES_USER: kestra
@@ -21,6 +21,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 10
+      start_period: 10s
     ports:
       - "5432:5432"
 
@@ -28,10 +29,8 @@ services:
     image: kestra/kestra:latest
     pull_policy: always
     container_name: tria-kestra
-    # Kestra, by default, has a termination grace period of 5m. We need to wait a little more to be sure no active tasks are running.
+    restart: unless-stopped
     stop_grace_period: 6m
-    # Note that this setup with a root user is intended for development purpose.
-    # Our base image runs without root, but the Docker Compose implementation needs root to access the Docker socket
     user: "root"
     command: server standalone
     volumes:
@@ -52,8 +51,8 @@ services:
         kestra:
           server:
             basic-auth:
-              username: katare27451@gmail.com
-              password: Tria2341
+              username: teamtria@gmail.com
+              password: Tria1234
           repository:
             type: postgres
           storage:
@@ -80,4 +79,4 @@ services:
       - "8081:8081"
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy

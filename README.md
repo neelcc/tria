@@ -103,8 +103,8 @@ Access Kestra UI:
 
 **Default credentials**
 
-* Username: `admin@kestra.io`
-* Password: `kestra`
+* Username: `teamtria@gmail.com`
+* Password: `Tria1234`
 
 ---
 
